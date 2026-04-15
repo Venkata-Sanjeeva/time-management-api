@@ -1,5 +1,13 @@
 package com.example.timeManagementApi.service.interfaces.corporate;
 
-public interface LeaveService {
+import com.example.timeManagementApi.request.EmployeeLeaveRequest;
 
+public interface LeaveService {
+	Object saveLeaveInDB(EmployeeLeaveRequest empLeaveReq);
+	
+	Object updateLeave(String leaveId, EmployeeLeaveRequest empLeaveReq);
+	
+	Object readLeave(String leaveId);
+	
+	void deleteLeave(String leaveId);
 }
