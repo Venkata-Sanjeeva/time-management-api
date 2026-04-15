@@ -1,5 +1,6 @@
 package com.example.timeManagementApi.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class Employee {
 	private String designation;
 	
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-	private List<Leave> leavesTaken;
+	private List<Leave> leavesTaken = new ArrayList<Leave>();
 	
 //	@ManyToOne
 //	@JoinColumn(name = "roster_id")
