@@ -19,14 +19,12 @@ import com.example.timeManagementApi.response.RegisterResponse;
 import com.example.timeManagementApi.service.impl.AuthUserServiceImpl;
 import com.example.timeManagementApi.service.impl.ResetPasswordService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Time Management API")
 public class AuthController {
 	
 	private final AuthUserServiceImpl authUserService;

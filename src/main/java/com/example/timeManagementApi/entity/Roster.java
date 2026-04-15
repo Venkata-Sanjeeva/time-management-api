@@ -1,0 +1,63 @@
+package com.example.timeManagementApi.entity;
+
+import java.util.List;
+import java.util.UUID;
+
+import com.example.timeManagementApi.enums.Shifts;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Table(name = "roster")
+@Entity
+@Getter
+@Setter
+public class Roster {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
+	
+	@Column(nullable = false, length = 15)
+	private String rosterMonth;
+	
+	@Column(nullable = false, length = 4)
+	private String rosterYear;
+	
+	@Column(nullable = false)
+	private Integer daysToAssignEachEmp;
+	
+	@Column(nullable = false)
+	private Integer weekdaysOff;
+	
+	@Column(nullable = false)
+	private Boolean includeWeekends;
+	
+	
+	@Column(nullable = false)
+	private Boolean seniorStaffPresence;
+	
+//	@OneToMany(mappedBy = "roster")
+//	private List<Employee> allocatedEmployees;
+	
+	@ElementCollection
+	private List<Employee> allocatedEmployees;
+	
+	@Enumerated
+	@ElementCollection
+	private List<Shifts> shifts;
+	
+//	public void addEmployee(Employee employee) {
+//	    allocatedEmployees.add(employee);
+//	    employee.setRoster(this);
+//	}
+}
