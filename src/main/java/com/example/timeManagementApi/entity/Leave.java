@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table(name = "leave")
+@Table(name = "leaves")
 @Entity
 @Getter
 @Setter
