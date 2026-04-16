@@ -2,14 +2,15 @@ package com.example.timeManagementApi.service.interfaces.corporate;
 
 
 import com.example.timeManagementApi.request.corporate.EmployeeRequest;
+import com.example.timeManagementApi.response.corporate.EmployeeResponse;
 
 public interface EmployeeService {
 	
-	Object saveEmployeeInDB(EmployeeRequest empReq);
+	EmployeeResponse saveEmployeeInDB(EmployeeRequest empReq);
 	
-	Object updateEmployee(String empId, EmployeeRequest empReq);
+	EmployeeResponse updateEmployee(String empId, EmployeeRequest empReq);
 	
-	Object readEmployee(String empId);
+	EmployeeResponse readEmployee(String empId);
 	
 	void deleteEmployee(String empId);
 }

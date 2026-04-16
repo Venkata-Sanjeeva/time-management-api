@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.timeManagementApi.request.corporate.EmployeeRequest;
 import com.example.timeManagementApi.response.GlobalResponse;
+import com.example.timeManagementApi.response.corporate.EmployeeResponse;
 import com.example.timeManagementApi.service.impl.corporate.EmployeeServiceImpl;
 
 @RestController
@@ -23,8 +24,8 @@ public class EmployeeController {
 	private EmployeeServiceImpl empService;
 	
 	@PostMapping("/create")
-	public GlobalResponse<?> createEmployee(@RequestBody EmployeeRequest empReq) {
-		return GlobalResponse.builder()
+	public GlobalResponse<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest empReq) {
+		return GlobalResponse.<EmployeeResponse>builder()
 				.status(HttpStatus.CREATED.value())
 				.data(empService.saveEmployeeInDB(empReq))
 				.message("Employee created successfully!")
@@ -32,8 +33,8 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/read/{id}")
-	public GlobalResponse<?> readEmployee(@PathVariable(name = "id") String empId) {
-		return GlobalResponse.builder()
+	public GlobalResponse<EmployeeResponse> readEmployee(@PathVariable(name = "id") String empId) {
+		return GlobalResponse.<EmployeeResponse>builder()
 				.status(HttpStatus.OK.value())
 				.data(empService.readEmployee(empId))
 				.message("Employee fetched successfully!")
@@ -42,10 +43,10 @@ public class EmployeeController {
 	
 	
 	@PatchMapping("/update/{id}")
-	public GlobalResponse<?> updateEmployee(
+	public GlobalResponse<EmployeeResponse> updateEmployee(
 			@PathVariable(name = "id") String empId,
 			@RequestBody EmployeeRequest empReq) {
-		return GlobalResponse.builder()
+		return GlobalResponse.<EmployeeResponse>builder()
 				.status(HttpStatus.OK.value())
 				.data(empService.updateEmployee(empId, empReq))
 				.message("Employee updated successfully!")

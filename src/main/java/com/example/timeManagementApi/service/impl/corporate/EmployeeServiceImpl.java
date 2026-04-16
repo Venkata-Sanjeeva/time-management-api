@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.timeManagementApi.entity.corporate.Employee;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.request.corporate.EmployeeRequest;
+import com.example.timeManagementApi.response.corporate.EmployeeResponse;
 import com.example.timeManagementApi.service.interfaces.corporate.EmployeeService;
 
 @Service
@@ -15,28 +16,46 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeRepository empRepo;
 	
 	@Override
-	public Object saveEmployeeInDB(EmployeeRequest empReq) {
+	public EmployeeResponse saveEmployeeInDB(EmployeeRequest empReq) {
 		Employee emp = new Employee();
 		
 		emp.setName(empReq.getName());
 		emp.setDesignation(empReq.getDesignation());
 		
-		return empRepo.save(emp);
+		Employee savedEmp = empRepo.save(emp);
+		
+		return EmployeeResponse.builder()
+				.empId(savedEmp.getId())
+				.name(savedEmp.getName())
+				.designation(savedEmp.getDesignation())
+				.build();
 	}
 
 	@Override
-	public Object updateEmployee(String empId, EmployeeRequest empReq) {
+	public EmployeeResponse updateEmployee(String empId, EmployeeRequest empReq) {
 		Employee emp = empRepo.findById(empId).orElseThrow();
 		
 		emp.setName(empReq.getName());
 		emp.setDesignation(empReq.getDesignation());
 		
-		return empRepo.save(emp);
+		Employee savedEmp = empRepo.save(emp);
+		
+		return EmployeeResponse.builder()
+				.empId(savedEmp.getId())
+				.name(savedEmp.getName())
+				.designation(savedEmp.getDesignation())
+				.build();
 	}
 
 	@Override
-	public Object readEmployee(String empId) {
-		return empRepo.findById(empId).orElseThrow();
+	public EmployeeResponse readEmployee(String empId) {
+		Employee emp = empRepo.findById(empId).orElseThrow();
+		
+		return EmployeeResponse.builder()
+				.empId(emp.getId())
+				.name(emp.getName())
+				.designation(emp.getDesignation())
+				.build();
 	}
 
 	@Override
