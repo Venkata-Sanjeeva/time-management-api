@@ -41,7 +41,7 @@ public class Roster {
 	@Column(nullable = false)
 	private Boolean seniorStaffPresence;
 	
-	@OneToMany(mappedBy = "roster")
+	@OneToMany
 	private List<Employee> allocatedEmployees;
 	
 	private List<Shifts> shifts;

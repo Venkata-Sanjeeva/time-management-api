@@ -40,9 +40,6 @@ public class Employee {
 	private List<Leave> leavesTaken = new ArrayList<Leave>();
 	
 	@ManyToOne
-	private Roster roster;
-	
-	@ManyToOne
 	private User user;
 	
 }

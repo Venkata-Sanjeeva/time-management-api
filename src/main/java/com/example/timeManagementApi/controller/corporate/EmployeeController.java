@@ -1,6 +1,7 @@
 package com.example.timeManagementApi.controller.corporate;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,15 @@ public class EmployeeController {
 				.build());
 	}
 	
+	@GetMapping("/read/all")
+	public ResponseEntity<GlobalResponse<List<EmployeeResponse>>> readAllEmployeesRelatesToUser(Principal principal) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(GlobalResponse.<List<EmployeeResponse>>builder()
+				.status(HttpStatus.OK.value())
+				.data(empService.readAllEmployeeRelatedToUser(principal.getName()))
+				.message("Employees fetched successfully!")
+				.build());
+	}
 	
 	@PatchMapping("/update/{id}")
 	public ResponseEntity<GlobalResponse<EmployeeResponse>> updateEmployee(

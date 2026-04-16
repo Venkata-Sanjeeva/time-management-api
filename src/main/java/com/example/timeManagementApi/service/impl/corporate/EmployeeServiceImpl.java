@@ -1,5 +1,7 @@
 package com.example.timeManagementApi.service.impl.corporate;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +73,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 				.email(emp.getEmail())
 				.designation(emp.getDesignation())
 				.build();
+	}
+	
+	@Override
+	public List<EmployeeResponse> readAllEmployeeRelatedToUser(String userEmail) {
+		List<Employee> empList = empRepo.findByUserEmail(userEmail);
+		
+		return empList.stream()
+			.map((emp) -> EmployeeResponse.builder()
+				.empId(emp.getId())
+				.name(emp.getName())
+				.email(emp.getEmail())
+				.designation(emp.getDesignation())
+				.build())
+			.toList();
 	}
 
 	@Override
