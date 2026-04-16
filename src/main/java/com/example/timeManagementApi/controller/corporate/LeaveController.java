@@ -52,6 +52,15 @@ public class LeaveController {
 				.build();
 	}
 	
+	@GetMapping("/read/all/{id}")
+	public GlobalResponse<List<LeaveResponse>> readAllLeavesByEmpId(@PathVariable(name = "id") String empId) {
+		return GlobalResponse.<List<LeaveResponse>>builder()
+				.status(HttpStatus.OK.value())
+				.data(leaveService.readAllLeavesByEmpId(empId))
+				.message("Employee Leaves fetched successfully!")
+				.build();
+	}
+	
 	
 	@PatchMapping("/update/{id}")
 	public GlobalResponse<LeaveResponse> updateLeave(

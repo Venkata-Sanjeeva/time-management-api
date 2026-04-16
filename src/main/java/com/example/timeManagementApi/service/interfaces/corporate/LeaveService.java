@@ -14,5 +14,7 @@ public interface LeaveService {
 	
 	LeaveResponse readLeave(String leaveId);
 	
+	List<LeaveResponse> readAllLeavesByEmpId(String empId);
+	
 	void deleteLeave(String leaveId);
 }

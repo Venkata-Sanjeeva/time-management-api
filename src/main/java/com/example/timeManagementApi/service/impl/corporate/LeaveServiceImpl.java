@@ -70,6 +70,19 @@ public class LeaveServiceImpl implements LeaveService {
 				.leaveDate(leave.getLeaveDate())
 				.build();
 	}
+	
+	@Override
+	public List<LeaveResponse> readAllLeavesByEmpId(String empId) {
+		List<Leave> leavesList = leaveRepo.findByEmployeeId(empId);
+		
+		return leavesList.stream()
+				.map((leave) -> LeaveResponse.builder()
+						.leaveId(leave.getId())
+						.empId(leave.getEmployee().getId())
+						.leaveDate(leave.getLeaveDate())
+						.build())
+				.toList();
+	}
 
 	@Override
 	public void deleteLeave(String leaveId) {
