@@ -11,4 +11,9 @@ public interface LeaveRepository extends JpaRepository<Leave, String> {
 	List<Leave> findByEmployeeId(String empId);
 	List<Leave> findByEmployeeIdOrderByLeaveDateDesc(String empId);
 	boolean existsByEmployeeIdAndLeaveDate(String empId, LocalDate leaveDate);
+	List<Leave> findByEmployee_IdAndLeaveDateBetween(
+	        String empId, 
+	        LocalDate start, 
+	        LocalDate end
+	    );
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.timeManagementApi.request.corporate.EmployeeLeaveRequest;
@@ -64,6 +65,22 @@ public class LeaveController {
 				.data(leaveService.readAllLeavesByEmpId(empId))
 				.message("Employee Leaves fetched successfully!")
 				.build());
+	}
+	
+	@GetMapping("/month/read/all/{empId}")
+	public ResponseEntity<GlobalResponse<List<LeaveResponse>>> getEmployeeLeavesByMonth(
+	        @PathVariable String empId,
+	        @RequestParam int year,
+	        @RequestParam int month) {
+	    
+	    List<LeaveResponse> leaves = leaveService.getLeavesByMonth(empId, year, month);
+	    
+	    return ResponseEntity.status(HttpStatus.OK)
+	    		.body(GlobalResponse.<List<LeaveResponse>>builder()
+	    				.status(HttpStatus.OK.value())
+	    				.data(leaves)
+	    				.message("Leave Dates Fetched successfully!")
+	    				.build());
 	}
 	
 	

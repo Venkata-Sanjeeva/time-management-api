@@ -1,5 +1,6 @@
 package com.example.timeManagementApi.service.impl.corporate;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,24 @@ public class LeaveServiceImpl implements LeaveService {
 				.empId(leave.getEmployee().getId())
 				.leaveDate(leave.getLeaveDate())
 				.build();
+	}
+	
+	@Override
+	public List<LeaveResponse> getLeavesByMonth(String empId, Integer year, Integer month) {
+		// Create the first day of the month: e.g., 2026-04-01
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        
+        // Create the last day of the month: e.g., 2026-04-30
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        
+        List<Leave> leavesRelatedToMonth = leaveRepo.findByEmployee_IdAndLeaveDateBetween(empId, startDate, endDate);
+        
+        return leavesRelatedToMonth.stream().map((leave) -> LeaveResponse.builder()
+        		.empId(empId)
+        		.leaveId(leave.getId())
+        		.leaveDate(leave.getLeaveDate())
+        		.build())
+        .toList();
 	}
 	
 	@Override
