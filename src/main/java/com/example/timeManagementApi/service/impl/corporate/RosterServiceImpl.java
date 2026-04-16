@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.timeManagementApi.entity.Employee;
-import com.example.timeManagementApi.entity.Roster;
+import com.example.timeManagementApi.entity.corporate.Employee;
+import com.example.timeManagementApi.entity.corporate.Roster;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.repository.corporate.RosterRepository;
 import com.example.timeManagementApi.request.RosterRequest;

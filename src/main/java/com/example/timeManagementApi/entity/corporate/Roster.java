@@ -1,4 +1,4 @@
-package com.example.timeManagementApi.entity;
+package com.example.timeManagementApi.entity.corporate;
 
 import java.util.List;
 

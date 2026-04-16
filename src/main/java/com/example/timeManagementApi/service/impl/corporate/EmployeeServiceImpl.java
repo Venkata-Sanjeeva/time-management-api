@@ -3,7 +3,7 @@ package com.example.timeManagementApi.service.impl.corporate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.timeManagementApi.entity.Employee;
+import com.example.timeManagementApi.entity.corporate.Employee;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.request.EmployeeRequest;
 import com.example.timeManagementApi.service.interfaces.corporate.EmployeeService;

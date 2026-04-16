@@ -1,6 +1,7 @@
-package com.example.timeManagementApi.entity;
+package com.example.timeManagementApi.entity.corporate;
 
 import java.time.LocalDate;
+
 import com.example.timeManagementApi.util.IdentifierGenerator;
 
 import jakarta.persistence.Column;
