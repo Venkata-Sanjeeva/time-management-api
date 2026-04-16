@@ -1,6 +1,6 @@
 package com.example.timeManagementApi.service.interfaces.corporate;
 
-import com.example.timeManagementApi.request.RosterRequest;
+import com.example.timeManagementApi.request.corporate.RosterRequest;
 
 public interface RosterService {
 	Object saveRosterInDB(RosterRequest rosterReq);

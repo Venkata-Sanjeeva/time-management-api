@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.timeManagementApi.entity.corporate.Employee;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
-import com.example.timeManagementApi.request.EmployeeRequest;
+import com.example.timeManagementApi.request.corporate.EmployeeRequest;
 import com.example.timeManagementApi.service.interfaces.corporate.EmployeeService;
 
 @Service

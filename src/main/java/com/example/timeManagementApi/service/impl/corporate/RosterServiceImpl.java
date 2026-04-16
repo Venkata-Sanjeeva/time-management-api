@@ -9,7 +9,7 @@ import com.example.timeManagementApi.entity.corporate.Employee;
 import com.example.timeManagementApi.entity.corporate.Roster;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.repository.corporate.RosterRepository;
-import com.example.timeManagementApi.request.RosterRequest;
+import com.example.timeManagementApi.request.corporate.RosterRequest;
 import com.example.timeManagementApi.service.interfaces.corporate.RosterService;
 
 @Service

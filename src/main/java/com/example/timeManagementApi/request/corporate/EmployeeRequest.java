@@ -1,4 +1,4 @@
-package com.example.timeManagementApi.request;
+package com.example.timeManagementApi.request.corporate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

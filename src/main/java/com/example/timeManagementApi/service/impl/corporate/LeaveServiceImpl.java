@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.timeManagementApi.entity.corporate.Leave;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.repository.corporate.LeaveRepository;
-import com.example.timeManagementApi.request.EmployeeLeaveRequest;
+import com.example.timeManagementApi.request.corporate.EmployeeLeaveRequest;
 import com.example.timeManagementApi.service.interfaces.corporate.LeaveService;
 
 @Service

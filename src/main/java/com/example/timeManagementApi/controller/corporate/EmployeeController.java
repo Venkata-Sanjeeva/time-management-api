@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.timeManagementApi.request.EmployeeRequest;
+import com.example.timeManagementApi.request.corporate.EmployeeRequest;
 import com.example.timeManagementApi.response.GlobalResponse;
 import com.example.timeManagementApi.service.impl.corporate.EmployeeServiceImpl;
 

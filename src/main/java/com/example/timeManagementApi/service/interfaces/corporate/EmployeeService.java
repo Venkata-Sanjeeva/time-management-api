@@ -1,7 +1,7 @@
 package com.example.timeManagementApi.service.interfaces.corporate;
 
 
-import com.example.timeManagementApi.request.EmployeeRequest;
+import com.example.timeManagementApi.request.corporate.EmployeeRequest;
 
 public interface EmployeeService {
 	
