@@ -2,6 +2,7 @@ package com.example.timeManagementApi.controller.corporate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,43 +25,47 @@ public class EmployeeController {
 	private EmployeeServiceImpl empService;
 	
 	@PostMapping("/create")
-	public GlobalResponse<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest empReq) {
-		return GlobalResponse.<EmployeeResponse>builder()
-				.status(HttpStatus.CREATED.value())
-				.data(empService.saveEmployeeInDB(empReq))
-				.message("Employee created successfully!")
-				.build();
+	public ResponseEntity<GlobalResponse<EmployeeResponse>> createEmployee(@RequestBody EmployeeRequest empReq) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(GlobalResponse.<EmployeeResponse>builder()
+						.status(HttpStatus.CREATED.value())
+						.data(empService.saveEmployeeInDB(empReq))
+						.message("Employee created successfully!")
+						.build());
 	}
 	
 	@GetMapping("/read/{id}")
-	public GlobalResponse<EmployeeResponse> readEmployee(@PathVariable(name = "id") String empId) {
-		return GlobalResponse.<EmployeeResponse>builder()
+	public ResponseEntity<GlobalResponse<EmployeeResponse>> readEmployee(@PathVariable(name = "id") String empId) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(GlobalResponse.<EmployeeResponse>builder()
 				.status(HttpStatus.OK.value())
 				.data(empService.readEmployee(empId))
 				.message("Employee fetched successfully!")
-				.build();
+				.build());
 	}
 	
 	
 	@PatchMapping("/update/{id}")
-	public GlobalResponse<EmployeeResponse> updateEmployee(
+	public ResponseEntity<GlobalResponse<EmployeeResponse>> updateEmployee(
 			@PathVariable(name = "id") String empId,
 			@RequestBody EmployeeRequest empReq) {
-		return GlobalResponse.<EmployeeResponse>builder()
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(GlobalResponse.<EmployeeResponse>builder()
 				.status(HttpStatus.OK.value())
 				.data(empService.updateEmployee(empId, empReq))
 				.message("Employee updated successfully!")
-				.build();
+				.build());
 	}
 		
 	@DeleteMapping("/delete/{id}")
-	public GlobalResponse<?> deleteEmployee(@PathVariable(name = "id") String empId) {
+	public ResponseEntity<GlobalResponse<?>> deleteEmployee(@PathVariable(name = "id") String empId) {
 		empService.deleteEmployee(empId);
 		
-		return GlobalResponse.builder()
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(GlobalResponse.builder()
 				.status(HttpStatus.OK.value())
 				.data(null)
 				.message("Employee deleted successfully!")
-				.build();
+				.build());
 	}
 }
