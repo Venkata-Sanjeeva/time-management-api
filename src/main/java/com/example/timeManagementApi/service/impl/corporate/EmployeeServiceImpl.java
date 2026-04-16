@@ -21,12 +21,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		emp.setName(empReq.getName());
 		emp.setDesignation(empReq.getDesignation());
+		emp.setEmail(empReq.getEmail());
 		
 		Employee savedEmp = empRepo.save(emp);
 		
 		return EmployeeResponse.builder()
 				.empId(savedEmp.getId())
 				.name(savedEmp.getName())
+				.email(savedEmp.getEmail())
 				.designation(savedEmp.getDesignation())
 				.build();
 	}
@@ -37,12 +39,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		emp.setName(empReq.getName());
 		emp.setDesignation(empReq.getDesignation());
+		emp.setEmail(empReq.getEmail());
 		
 		Employee savedEmp = empRepo.save(emp);
 		
 		return EmployeeResponse.builder()
 				.empId(savedEmp.getId())
 				.name(savedEmp.getName())
+				.email(savedEmp.getEmail())
 				.designation(savedEmp.getDesignation())
 				.build();
 	}
@@ -54,6 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return EmployeeResponse.builder()
 				.empId(emp.getId())
 				.name(emp.getName())
+				.email(emp.getEmail())
 				.designation(emp.getDesignation())
 				.build();
 	}

@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,10 @@ public class Employee {
 	
 	@Column(nullable = false, length = 100, unique = true)
 	private String name;
+	
+	@Column(nullable = false, unique = true)
+	@Email
+	private String email;
 	
 	@Column(nullable = false, length = 50)
 	private String designation;
