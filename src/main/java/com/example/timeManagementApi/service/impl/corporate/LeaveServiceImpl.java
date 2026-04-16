@@ -1,5 +1,7 @@
 package com.example.timeManagementApi.service.impl.corporate;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +21,20 @@ public class LeaveServiceImpl implements LeaveService {
 	private EmployeeRepository empRepo;
 	
 	@Override
-	public Object saveLeaveInDB(EmployeeLeaveRequest empLeaveReq) {
+	public Object saveSingleLeaveInDB(EmployeeLeaveRequest empLeaveReq) {
 		Leave leave = new Leave();
 		
 		leave.setEmployee(empRepo.findById(empLeaveReq.getEmpId()).orElseThrow());
 		leave.setLeaveDate(empLeaveReq.getLeaveDate());
 		
 		return leaveRepo.save(leave);
+	}
+	
+	@Override
+	public Object saveMultipleLeaveInDB(List<EmployeeLeaveRequest> empLeaveReqList) {
+		return empLeaveReqList.stream()
+				.map((empLeaveReq) -> saveSingleLeaveInDB(empLeaveReq))
+				.toList();
 	}
 
 	@Override
