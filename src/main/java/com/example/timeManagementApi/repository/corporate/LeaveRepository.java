@@ -10,5 +10,5 @@ import com.example.timeManagementApi.entity.corporate.Leave;
 public interface LeaveRepository extends JpaRepository<Leave, String> {
 	List<Leave> findByEmployeeId(String empId);
 	List<Leave> findByEmployeeIdOrderByLeaveDateDesc(String empId);
-	boolean existsByEmployeeEmailAndLeaveDate(String empEmail, LocalDate leaveDate);
+	boolean existsByEmployeeIdAndLeaveDate(String empId, LocalDate leaveDate);
 }

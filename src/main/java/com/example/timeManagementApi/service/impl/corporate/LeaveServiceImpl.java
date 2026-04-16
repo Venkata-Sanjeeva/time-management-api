@@ -23,18 +23,23 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	@Override
 	public LeaveResponse saveSingleLeaveInDB(EmployeeLeaveRequest empLeaveReq) {
-		Leave leave = new Leave();
 		
-		leave.setEmployee(empRepo.findById(empLeaveReq.getEmpId()).orElseThrow());
-		leave.setLeaveDate(empLeaveReq.getLeaveDate());
+		if(!leaveRepo.existsByEmployeeIdAndLeaveDate(empLeaveReq.getEmpId(), empLeaveReq.getLeaveDate())) {
+			Leave leave = new Leave();
+			
+			leave.setEmployee(empRepo.findById(empLeaveReq.getEmpId()).orElseThrow());
+			leave.setLeaveDate(empLeaveReq.getLeaveDate());
+			
+			Leave savedLeave = leaveRepo.save(leave);
+			
+			return LeaveResponse.builder()
+					.leaveId(savedLeave.getId())
+					.empId(savedLeave.getEmployee().getId())
+					.leaveDate(savedLeave.getLeaveDate())
+					.build();
+		}
 		
-		Leave savedLeave = leaveRepo.save(leave);
-		
-		return LeaveResponse.builder()
-				.leaveId(savedLeave.getId())
-				.empId(savedLeave.getEmployee().getId())
-				.leaveDate(savedLeave.getLeaveDate())
-				.build();
+		return null;
 	}
 	
 	@Override
@@ -73,7 +78,7 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	@Override
 	public List<LeaveResponse> readAllLeavesByEmpId(String empId) {
-		List<Leave> leavesList = leaveRepo.findByEmployeeId(empId);
+		List<Leave> leavesList = leaveRepo.findByEmployeeIdOrderByLeaveDateDesc(empId);
 		
 		return leavesList.stream()
 				.map((leave) -> LeaveResponse.builder()
