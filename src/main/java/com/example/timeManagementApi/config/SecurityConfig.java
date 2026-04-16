@@ -56,7 +56,7 @@ public class SecurityConfig {
                         
                         // 2. Secured Endpoints (Fixed Syntax)
 //                         .requestMatchers("/api/trip/**", "/api/expenses/**").hasAuthority("USER")
-                		.requestMatchers("/employees/**").hasAuthority("USER")
+                		.requestMatchers("/employees/**", "/leaves/**").hasAuthority("USER")
                         
                         // 3. Final Catch-all
                         .anyRequest().authenticated()

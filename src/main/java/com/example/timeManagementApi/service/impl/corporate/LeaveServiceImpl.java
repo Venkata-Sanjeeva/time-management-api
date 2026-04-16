@@ -9,6 +9,7 @@ import com.example.timeManagementApi.entity.corporate.Leave;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.repository.corporate.LeaveRepository;
 import com.example.timeManagementApi.request.corporate.EmployeeLeaveRequest;
+import com.example.timeManagementApi.response.corporate.LeaveResponse;
 import com.example.timeManagementApi.service.interfaces.corporate.LeaveService;
 
 @Service
@@ -21,35 +22,53 @@ public class LeaveServiceImpl implements LeaveService {
 	private EmployeeRepository empRepo;
 	
 	@Override
-	public Object saveSingleLeaveInDB(EmployeeLeaveRequest empLeaveReq) {
+	public LeaveResponse saveSingleLeaveInDB(EmployeeLeaveRequest empLeaveReq) {
 		Leave leave = new Leave();
 		
 		leave.setEmployee(empRepo.findById(empLeaveReq.getEmpId()).orElseThrow());
 		leave.setLeaveDate(empLeaveReq.getLeaveDate());
 		
-		return leaveRepo.save(leave);
+		Leave savedLeave = leaveRepo.save(leave);
+		
+		return LeaveResponse.builder()
+				.leaveId(savedLeave.getId())
+				.empId(savedLeave.getEmployee().getId())
+				.leaveDate(savedLeave.getLeaveDate())
+				.build();
 	}
 	
 	@Override
-	public Object saveMultipleLeaveInDB(List<EmployeeLeaveRequest> empLeaveReqList) {
+	public List<LeaveResponse> saveMultipleLeaveInDB(List<EmployeeLeaveRequest> empLeaveReqList) {
 		return empLeaveReqList.stream()
 				.map((empLeaveReq) -> saveSingleLeaveInDB(empLeaveReq))
 				.toList();
 	}
 
 	@Override
-	public Object updateLeave(String leaveId, EmployeeLeaveRequest empLeaveReq) {
+	public LeaveResponse updateLeave(String leaveId, EmployeeLeaveRequest empLeaveReq) {
 		Leave leave = leaveRepo.findById(leaveId).orElseThrow();
 		
 		leave.setEmployee(empRepo.findById(empLeaveReq.getEmpId()).orElseThrow());
 		leave.setLeaveDate(empLeaveReq.getLeaveDate());
 		
-		return leaveRepo.save(leave);
+		Leave savedLeave = leaveRepo.save(leave);
+		
+		return LeaveResponse.builder()
+				.leaveId(savedLeave.getId())
+				.empId(savedLeave.getEmployee().getId())
+				.leaveDate(savedLeave.getLeaveDate())
+				.build();
 	}
 
 	@Override
-	public Object readLeave(String leaveId) {
-		return leaveRepo.findById(leaveId).orElseThrow();
+	public LeaveResponse readLeave(String leaveId) {
+		Leave leave = leaveRepo.findById(leaveId).orElseThrow();
+		
+		return LeaveResponse.builder()
+				.leaveId(leave.getId())
+				.empId(leave.getEmployee().getId())
+				.leaveDate(leave.getLeaveDate())
+				.build();
 	}
 
 	@Override
