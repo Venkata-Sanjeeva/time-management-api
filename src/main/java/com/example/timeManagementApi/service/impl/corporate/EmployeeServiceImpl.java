@@ -3,7 +3,10 @@ package com.example.timeManagementApi.service.impl.corporate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.timeManagementApi.entity.User;
 import com.example.timeManagementApi.entity.corporate.Employee;
+import com.example.timeManagementApi.exception.UserNotFoundException;
+import com.example.timeManagementApi.repository.UserRepository;
 import com.example.timeManagementApi.repository.corporate.EmployeeRepository;
 import com.example.timeManagementApi.request.corporate.EmployeeRequest;
 import com.example.timeManagementApi.response.corporate.EmployeeResponse;
@@ -15,13 +18,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeRepository empRepo;
 	
+	@Autowired
+	private UserRepository userRepo;
+	
 	@Override
-	public EmployeeResponse saveEmployeeInDB(EmployeeRequest empReq) {
+	public EmployeeResponse saveEmployeeInDB(String userEmail, EmployeeRequest empReq) {
+		
+		User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException(userEmail));
+		
 		Employee emp = new Employee();
 		
 		emp.setName(empReq.getName());
 		emp.setDesignation(empReq.getDesignation());
 		emp.setEmail(empReq.getEmail());
+		emp.setUser(user);
 		
 		Employee savedEmp = empRepo.save(emp);
 		

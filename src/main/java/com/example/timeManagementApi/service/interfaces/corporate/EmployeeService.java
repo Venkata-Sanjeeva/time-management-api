@@ -6,7 +6,7 @@ import com.example.timeManagementApi.response.corporate.EmployeeResponse;
 
 public interface EmployeeService {
 	
-	EmployeeResponse saveEmployeeInDB(EmployeeRequest empReq);
+	EmployeeResponse saveEmployeeInDB(String userEmail, EmployeeRequest empReq);
 	
 	EmployeeResponse updateEmployee(String empId, EmployeeRequest empReq);
 	

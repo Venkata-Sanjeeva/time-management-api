@@ -1,5 +1,7 @@
 package com.example.timeManagementApi.controller.corporate;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +27,11 @@ public class EmployeeController {
 	private EmployeeServiceImpl empService;
 	
 	@PostMapping("/create")
-	public ResponseEntity<GlobalResponse<EmployeeResponse>> createEmployee(@RequestBody EmployeeRequest empReq) {
+	public ResponseEntity<GlobalResponse<EmployeeResponse>> createEmployee(@RequestBody EmployeeRequest empReq, Principal principal) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(GlobalResponse.<EmployeeResponse>builder()
 						.status(HttpStatus.CREATED.value())
-						.data(empService.saveEmployeeInDB(empReq))
+						.data(empService.saveEmployeeInDB(principal.getName(), empReq))
 						.message("Employee created successfully!")
 						.build());
 	}

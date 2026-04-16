@@ -6,10 +6,9 @@ import com.example.timeManagementApi.enums.Shifts;
 import com.example.timeManagementApi.util.IdentifierGenerator;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,14 +41,9 @@ public class Roster {
 	@Column(nullable = false)
 	private Boolean seniorStaffPresence;
 	
-//	@OneToMany(mappedBy = "roster")
-//	private List<Employee> allocatedEmployees;
-	
-	@ElementCollection
+	@OneToMany(mappedBy = "roster")
 	private List<Employee> allocatedEmployees;
 	
-	@Enumerated
-	@ElementCollection
 	private List<Shifts> shifts;
 	
 //	public void addEmployee(Employee employee) {
