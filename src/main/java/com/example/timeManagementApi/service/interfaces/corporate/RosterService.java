@@ -1,13 +1,14 @@
 package com.example.timeManagementApi.service.interfaces.corporate;
 
 import com.example.timeManagementApi.request.corporate.RosterRequest;
+import com.example.timeManagementApi.response.corporate.RosterResponse;
 
 public interface RosterService {
-	Object saveRosterInDB(RosterRequest rosterReq);
+	RosterResponse saveRosterInDB(RosterRequest rosterReq);
 	
-	Object updateRoster(String rosterId, RosterRequest rosterReq);
+	RosterResponse updateRoster(String rosterId, RosterRequest rosterReq);
 	
-	Object readRoster(String rosterId);
+	RosterResponse readRoster(String rosterId);
 	
 	void deleteRoster(String rosterId);
 }

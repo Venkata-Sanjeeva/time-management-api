@@ -88,7 +88,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<GlobalResponse<ErrorResponse>> handleGlobalException(Exception ex, HttpServletRequest request) {
         ErrorResponse error = new ErrorResponse(
             LocalDateTime.now(),
-            "An unexpected error occurred",
+            ex.getMessage(),
             request.getRequestURI()
         );
         

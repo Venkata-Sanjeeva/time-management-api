@@ -7,6 +7,8 @@ import com.example.timeManagementApi.util.IdentifierGenerator;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumeratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -44,6 +46,7 @@ public class Roster {
 	@OneToMany
 	private List<Employee> allocatedEmployees;
 	
+	@Enumerated
 	private List<Shifts> shifts;
 	
 //	public void addEmployee(Employee employee) {

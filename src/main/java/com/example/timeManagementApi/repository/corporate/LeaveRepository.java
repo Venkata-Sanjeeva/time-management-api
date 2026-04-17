@@ -24,7 +24,7 @@ public interface LeaveRepository extends JpaRepository<Leave, String> {
 	
 	@Modifying // Without this, you will get an InvalidDataAccessApiUsageException
     @Transactional // Required for delete operations. If the deletion fails halfway through, this ensures the database rolls back to its previous state, preventing "partial data loss."
-    @Query("DELETE FROM Leave l WHERE l.employee.empId = :empId " +
+    @Query("DELETE FROM Leave l WHERE l.employee.Id = :empId " +
            "AND l.leaveDate >= :startDate AND l.leaveDate <= :endDate")
     void deleteByEmployeeAndMonth(
         @Param("empId") String empId, 
