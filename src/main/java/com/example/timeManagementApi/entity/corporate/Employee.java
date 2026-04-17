@@ -42,4 +42,7 @@ public class Employee {
 	@ManyToOne
 	private User user;
 	
+	@ManyToOne
+	private Roster roster;
+	
 }

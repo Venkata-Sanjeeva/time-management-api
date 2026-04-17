@@ -72,7 +72,11 @@ public class RosterServiceImpl implements RosterService {
 		
 		List<Employee> empList = baseDTO.getSelectedEmployees()
 				.stream()
-				.map((empId) -> empRepo.findById(empId).orElseThrow())
+				.map((empId) -> {
+					Employee emp = empRepo.findById(empId).orElseThrow();
+					roster.addEmployee(emp);
+					return emp;
+				})
 				.toList();
 		
 		roster.setAllocatedEmployees(empList);

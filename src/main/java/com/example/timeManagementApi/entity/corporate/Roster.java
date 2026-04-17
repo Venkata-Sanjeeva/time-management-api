@@ -1,15 +1,20 @@
 package com.example.timeManagementApi.entity.corporate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.timeManagementApi.enums.Shifts;
 import com.example.timeManagementApi.util.IdentifierGenerator;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumeratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -43,14 +48,19 @@ public class Roster {
 	@Column(nullable = false)
 	private Boolean seniorStaffPresence;
 	
-	@OneToMany
-	private List<Employee> allocatedEmployees;
+	@OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
+	private List<Employee> allocatedEmployees = new ArrayList<>();
 	
-	@Enumerated
+	@ElementCollection(targetClass = Shifts.class)
+	@CollectionTable(name = "roster_shifts", joinColumns = @JoinColumn(name = "roster_id"))
+	@Enumerated(EnumType.STRING) // Saves as "MORNING" instead of 0
 	private List<Shifts> shifts;
 	
-//	public void addEmployee(Employee employee) {
-//	    allocatedEmployees.add(employee);
-//	    employee.setRoster(this);
-//	}
+	public void addEmployee(Employee employee) {
+	    if (allocatedEmployees == null) {
+	        allocatedEmployees = new ArrayList<>();
+	    }
+	    allocatedEmployees.add(employee);
+	    employee.setRoster(this); // Crucial: This sets the foreign key
+	}
 }
