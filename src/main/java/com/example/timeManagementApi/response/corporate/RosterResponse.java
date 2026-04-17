@@ -14,6 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RosterResponse {
 	private String rosterId;
+	private String rosterMonth;
+	private String rosterYear;
+	private Integer daysToAssignEachEmp;
+	private Integer weekdaysOff;
+	private Boolean includeWeekends;
+	private Boolean seniorStaffPresence;
 	
 	@Data
 	@AllArgsConstructor

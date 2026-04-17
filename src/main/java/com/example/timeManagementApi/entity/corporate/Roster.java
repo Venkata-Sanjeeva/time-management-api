@@ -3,6 +3,7 @@ package com.example.timeManagementApi.entity.corporate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.timeManagementApi.entity.User;
 import com.example.timeManagementApi.enums.Shifts;
 import com.example.timeManagementApi.util.IdentifierGenerator;
 
@@ -15,6 +16,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -55,6 +57,9 @@ public class Roster {
 	@CollectionTable(name = "roster_shifts", joinColumns = @JoinColumn(name = "roster_id"))
 	@Enumerated(EnumType.STRING) // Saves as "MORNING" instead of 0
 	private List<Shifts> shifts;
+	
+	@ManyToOne
+	private User user;
 	
 	public void addEmployee(Employee employee) {
 	    if (allocatedEmployees == null) {
