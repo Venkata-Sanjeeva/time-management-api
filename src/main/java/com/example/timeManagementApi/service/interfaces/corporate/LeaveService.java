@@ -19,4 +19,6 @@ public interface LeaveService {
 	List<LeaveResponse> readAllLeavesByEmpId(String empId);
 	
 	void deleteLeave(String leaveId);
+	
+	void deleteLeavesOfEmployeeByMonth(String empId, Integer year, Integer month);
 }

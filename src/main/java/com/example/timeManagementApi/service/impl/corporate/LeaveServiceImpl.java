@@ -24,7 +24,7 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	@Override
 	public LeaveResponse saveSingleLeaveInDB(EmployeeLeaveRequest empLeaveReq) {
-		
+		// Make sure to not save duplicate leave date of the employee
 		if(!leaveRepo.existsByEmployeeIdAndLeaveDate(empLeaveReq.getEmpId(), empLeaveReq.getLeaveDate())) {
 			Leave leave = new Leave();
 			
@@ -111,6 +111,18 @@ public class LeaveServiceImpl implements LeaveService {
 	@Override
 	public void deleteLeave(String leaveId) {
 		leaveRepo.deleteById(leaveId);
+	}
+
+	@Override
+	public void deleteLeavesOfEmployeeByMonth(String empId, Integer year, Integer month) {
+		// Create the first day of the month: e.g., 2026-04-01
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        
+        // Create the last day of the month: e.g., 2026-04-30
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        
+        leaveRepo.deleteByEmployeeAndMonth(empId, startDate, endDate);
+		
 	}
 
 }
