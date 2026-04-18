@@ -189,7 +189,6 @@ public class RosterServiceImpl implements RosterService {
 	    List<LocalDate> allDates = IntStream.rangeClosed(1, yearMonth.lengthOfMonth())
 	    		.mapToObj(yearMonth::atDay)
 	    		.toList();
-	    
 	    // Convert the date objects to Strings (ISO format) for the UI headers
 	    dto.setDates(allDates.stream().map(LocalDate::toString).toList());
 

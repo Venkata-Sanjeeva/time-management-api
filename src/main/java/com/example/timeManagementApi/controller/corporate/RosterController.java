@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.timeManagementApi.request.corporate.RosterRequest;
+import com.example.timeManagementApi.request.corporate.RosterRequestVersion1;
 import com.example.timeManagementApi.response.GlobalResponse;
 import com.example.timeManagementApi.response.corporate.RosterChartResponse;
 import com.example.timeManagementApi.response.corporate.RosterDTO;
@@ -37,6 +38,20 @@ public class RosterController {
 						.data(rosterService.saveRosterInDB(principal.getName(), rosterReq))
 						.message("Roster Created Successfully!")
 						.build());
+	}
+	
+	@PostMapping("/create/v1")
+	public ResponseEntity<GlobalResponse<RosterResponse>> createRosterV1(
+			@RequestBody RosterRequestVersion1 rosterReq,
+			Principal principal) {
+		System.out.println(rosterReq);
+//		return ResponseEntity.status(HttpStatus.CREATED)
+//				.body(GlobalResponse.<RosterResponse>builder()
+//						.status(HttpStatus.CREATED.value())
+//						.data(rosterService.saveRosterInDB(principal.getName(), rosterReq))
+//						.message("Roster Created Successfully!")
+//						.build());
+		return null;
 	}
 	
 	@GetMapping("/read/{id}")
