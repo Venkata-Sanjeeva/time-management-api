@@ -7,5 +7,5 @@ RUN mvn clean package -DskipTests
 # Use eclipse-temurin instead of the deprecated openjdk image
 FROM eclipse-temurin:17-jdk-alpine
 COPY --from=build /target/*.jar app.jar
-EXPOSE 1010
+EXPOSE 2020
 ENTRYPOINT ["java","-jar","app.jar"]
