@@ -167,75 +167,102 @@ public class RosterServiceImpl implements RosterService {
 		rosterRepo.deleteById(rosterId);
 	}
 
+	/**
+	 * Generates a structured chart for a specific roster period.
+		 * @param rosterId The unique identifier for the roster configuration
+		 * @return A DTO containing a list of dates and status rows for each employee
+	 */
 	@Override
 	public RosterChartResponse generateRosterChart(String rosterId) {
+	    // 1. Fetch the raw roster data (Year, Month, Employees, Leave data)
 	    RosterResponse rosterResponse = readRoster(rosterId);
 	    RosterChartResponse dto = new RosterChartResponse();
 	    dto.setRosterId(rosterId);
-	
+
+	    // 2. Parse the period into a Java YearMonth object for date calculations
 	    YearMonth yearMonth = YearMonth.of(
 	        Integer.parseInt(rosterResponse.getRosterYear()), 
 	        Month.valueOf(rosterResponse.getRosterMonth().toUpperCase())
 	    );
 	    
+	    // 3. Generate all valid calendar dates for that specific month (1st to 28th/30th/31st)
 	    List<LocalDate> allDates = IntStream.rangeClosed(1, yearMonth.lengthOfMonth())
-	        .mapToObj(yearMonth::atDay)
-	        .collect(Collectors.toList());
+	    		.mapToObj(yearMonth::atDay)
+	    		.toList();
 	    
-	    dto.setDates(allDates.stream().map(LocalDate::toString).collect(Collectors.toList()));
-	
-	    // Rotational logic: Use the employee's index to stagger their start days
+	    // Convert the date objects to Strings (ISO format) for the UI headers
+	    dto.setDates(allDates.stream().map(LocalDate::toString).toList());
+
+	    // empIndex is used to "stagger" schedules so employees don't have identical rosters
 	    int empIndex = 0;
 	    List<RosterChartResponse.EmployeeRow> rows = new ArrayList<>();
-	
+
+	    // 4. Iterate through each employee to build their individual schedule row
 	    for (EmployeeAndLeaveDTO emp : rosterResponse.getEmpList()) {
 	        RosterChartResponse.EmployeeRow row = new RosterChartResponse.EmployeeRow();
 	        row.setEmpName(emp.getEmpName());
 	        
+	        // Map to store: Key = "2023-10-01", Value = "SHIFT", "LEAVE", etc.
 	        Map<String, String> statusMap = new LinkedHashMap<>();
+	        
+	        // Tracking variables for weekly constraints (e.g., max 5 days/week)
 	        int shiftsAssignedInCurrentWeek = 0;
 	        int currentWeekOfYear = -1;
-	
+
+	        // 5. Convert leave list to a Set for O(1) fast lookup during the loop
 	        Set<LocalDate> leaves = emp.getLeavesList().stream()
 	            .map(LeaveDTO::getLeaveDate)
 	            .collect(Collectors.toSet());
-	
-	        // Rotational Offset: prevents everyone from working Mon-Fri every week
+
+	        // 6. ROTATIONAL OFFSET: A simple formula to vary the starting pattern per employee.
+	        // This ensures Employee A, B, and C start their work weeks differently.
 	        int rotationOffset = empIndex % 3; 
-	
+
 	        for (LocalDate date : allDates) {
-	            // Check if we have moved to a new week
+	            // A. Week Tracking: Reset the shift counter whenever the calendar week changes
 	            int weekOfYear = date.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
 	            if (weekOfYear != currentWeekOfYear) {
 	                currentWeekOfYear = weekOfYear;
-	                shiftsAssignedInCurrentWeek = 0; // Reset weekly limit
+	                shiftsAssignedInCurrentWeek = 0; 
 	            }
-	
+
 	            boolean isWeekend = (date.getDayOfWeek() == DayOfWeek.SATURDAY || 
 	                                 date.getDayOfWeek() == DayOfWeek.SUNDAY);
-	
+
+	            // B. Priority 1: Check for Approved Leaves
 	            if (leaves.contains(date)) {
 	                statusMap.put(date.toString(), "LEAVE");
-	            } else if (!rosterResponse.getIncludeWeekends() && isWeekend) {
+	            } 
+	            // C. Priority 2: Check if Weekends are disabled globally for this roster
+	            else if (!rosterResponse.getIncludeWeekends() && isWeekend) {
 	                statusMap.put(date.toString(), "WEEKEND_OFF");
-	            } else if (shiftsAssignedInCurrentWeek < rosterResponse.getDaysToAssignEachEmp()) {
+	            } 
+	            // D. Priority 3: Assign shifts if the employee hasn't hit their weekly limit
+	            else if (shiftsAssignedInCurrentWeek < rosterResponse.getDaysToAssignEachEmp()) {
 	                
-	                // Rotational Logic: Skip days based on offset to rotate start times
+	                /* * STAGGERING LOGIC:
+	                 * This conditional uses the rotationOffset to force a "day off" 
+	                 * at different intervals for different employees.
+	                 * This prevents the "everyone works Monday" bottleneck.
+	                 */
 	                if (date.getDayOfMonth() % (rotationOffset + 2) == 0 && shiftsAssignedInCurrentWeek == 0) {
 	                     statusMap.put(date.toString(), "OFF");
 	                } else {
 	                    statusMap.put(date.toString(), "SHIFT");
 	                    shiftsAssignedInCurrentWeek++;
 	                }
-	            } else {
+	            } 
+	            // E. Priority 4: If weekly limit is hit, mark as OFF
+	            else {
 	                statusMap.put(date.toString(), "OFF");
 	            }
 	        }
+	        
 	        row.setDayStatus(statusMap);
 	        rows.add(row);
-	        empIndex++;
+	        empIndex++; // Move to next employee to change the rotational offset
 	    }
-	
+
 	    dto.setRows(rows);
 	    return dto;
 	}
