@@ -19,7 +19,7 @@ import com.example.timeManagementApi.request.corporate.version1.RosterRequestVer
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1.ConstraintsDTO;
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1.ShiftDTO;
 import com.example.timeManagementApi.response.corporate.version0.RosterChartResponse;
-import com.example.timeManagementApi.response.corporate.version0.RosterDTO;
+import com.example.timeManagementApi.response.corporate.version1.RosterDTOV1;
 import com.example.timeManagementApi.response.corporate.version1.RosterResponseV1;
 import com.example.timeManagementApi.service.interfaces.corporate.version1.RosterService_V1;
 
@@ -138,15 +138,20 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 	}
 
 	@Override
-	public List<RosterDTO> readAllRostersRelatesToUserEmail(String userEmail) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RosterDTOV1> readAllRostersRelatesToUserEmail(String userEmail) {
+		List<Roster_V1> rosterList = rosterRepo.findAll();
+		
+		return rosterList.stream().map((roster) -> RosterDTOV1.builder()
+				.rosterId(roster.getId())
+				.startDate(roster.getStartDate())
+				.endDate(roster.getEndDate())
+				.build())
+			.toList();
 	}
 
 	@Override
 	public void deleteRoster(String rosterId) {
-		rosterRepo.deleteById(rosterId);
-		
+		rosterRepo.deleteById(rosterId);	
 	}
 	
 }

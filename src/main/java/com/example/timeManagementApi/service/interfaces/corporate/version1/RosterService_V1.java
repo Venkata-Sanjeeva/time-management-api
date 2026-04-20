@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1;
 import com.example.timeManagementApi.response.corporate.version0.RosterChartResponse;
-import com.example.timeManagementApi.response.corporate.version0.RosterDTO;
+import com.example.timeManagementApi.response.corporate.version1.RosterDTOV1;
 import com.example.timeManagementApi.response.corporate.version1.RosterResponseV1;
 
 public interface RosterService_V1 {
@@ -17,7 +17,7 @@ public interface RosterService_V1 {
 	
 	RosterChartResponse generateRosterChart(String rosterId);
 	
-	List<RosterDTO> readAllRostersRelatesToUserEmail(String userEmail);
+	List<RosterDTOV1> readAllRostersRelatesToUserEmail(String userEmail);
 	
 	void deleteRoster(String rosterId);
 }

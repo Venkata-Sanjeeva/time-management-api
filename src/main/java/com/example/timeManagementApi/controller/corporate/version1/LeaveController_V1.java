@@ -20,8 +20,11 @@ import com.example.timeManagementApi.response.GlobalResponse;
 import com.example.timeManagementApi.response.corporate.version1.LeaveResponseV1;
 import com.example.timeManagementApi.service.impl.corporate.version1.LeaveServiceImpl_V1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/leaves/v1")
+@Tag(name = "Leave Controller V1")
 public class LeaveController_V1 {
 	
 	@Autowired

@@ -20,8 +20,11 @@ import com.example.timeManagementApi.response.GlobalResponse;
 import com.example.timeManagementApi.response.corporate.version1.EmployeeResponseV1;
 import com.example.timeManagementApi.service.impl.corporate.version1.EmployeeServiceImpl_V1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/employees/v1")
+@Tag(name = "Employee Controller V1")
 public class EmployeeController_V1 {
 	
 	@Autowired
