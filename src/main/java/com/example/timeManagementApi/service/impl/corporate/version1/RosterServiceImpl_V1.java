@@ -2,6 +2,7 @@ package com.example.timeManagementApi.service.impl.corporate.version1;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,11 +13,13 @@ import org.springframework.stereotype.Service;
 import com.example.timeManagementApi.entity.User;
 import com.example.timeManagementApi.entity.corporate.version1.Employee_V1;
 import com.example.timeManagementApi.entity.corporate.version1.Roster_V1;
+import com.example.timeManagementApi.entity.corporate.version1.SeniorEmployee;
 import com.example.timeManagementApi.entity.corporate.version1.Shift_V1;
 import com.example.timeManagementApi.exception.UserNotFoundException;
 import com.example.timeManagementApi.repository.UserRepository;
 import com.example.timeManagementApi.repository.corporate.version1.EmployeeRepository_V1;
 import com.example.timeManagementApi.repository.corporate.version1.RosterRepository_V1;
+import com.example.timeManagementApi.repository.corporate.version1.SeniorEmployeeRepository;
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1;
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1.ConstraintsDTO;
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1.ShiftDTO;
@@ -33,6 +36,9 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 	
 	@Autowired
 	private EmployeeRepository_V1 empRepo;
+	
+	@Autowired
+	private SeniorEmployeeRepository seniorEmpRepo;
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -81,6 +87,23 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 		rosterV1.setSeniorStaffPresence(constraintsDTO.isRequireSeniorOnShift());
 		rosterV1.setWeekdaysOff(constraintsDTO.getOffDaysPerRotation());
 		
+		Set<SeniorEmployee> seniorEmpList = new HashSet<SeniorEmployee>();
+		
+		if(constraintsDTO.isRequireSeniorOnShift()) {
+			rosterReq.getSeniors().stream()
+		    .forEach((empId) -> {
+		        Employee_V1 emp = empRepo.findById(empId)
+		            .orElseThrow(() -> new RuntimeException("Employee ID " + empId + " not found in DB"));
+		        
+		        SeniorEmployee seniorEmp = new SeniorEmployee();
+		        
+		        seniorEmp.setEmployee(emp);
+		        seniorEmp.setRoster(rosterV1);
+		        
+		        seniorEmpList.add(seniorEmp);
+		    });
+		}
+		
 		Set<Employee_V1> empList = rosterReq.getEmployeeIds()
 			    .stream()
 			    .map((empId) -> {
@@ -91,6 +114,7 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 			    }).collect(Collectors.toSet());
 		
 		rosterV1.setAllocatedEmployees(empList);
+		rosterV1.setSeniorEmployees(seniorEmpList);
 		
 		List<Shift_V1> shiftsList = new ArrayList<Shift_V1>();
 		

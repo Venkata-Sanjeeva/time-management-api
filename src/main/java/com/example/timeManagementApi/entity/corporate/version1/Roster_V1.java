@@ -50,13 +50,15 @@ public class Roster_V1 {
 	@Column(nullable = false)
 	private Boolean seniorStaffPresence;
 	
+	@OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
+	private Set<SeniorEmployee> seniorEmployees; 
+	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(
 	    name = "roster_employee_mapping",
 	    joinColumns = @JoinColumn(name = "roster_id"),
 	    inverseJoinColumns = @JoinColumn(name = "employee_id")
 	)
-	
 	private Set<Employee_V1> allocatedEmployees = new HashSet<>();
 	
 	@OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
