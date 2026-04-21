@@ -2,7 +2,9 @@ package com.example.timeManagementApi.entity.corporate.version1;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.timeManagementApi.entity.User;
 import com.example.timeManagementApi.util.IdentifierGenerator;
@@ -11,6 +13,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -45,8 +50,14 @@ public class Roster_V1 {
 	@Column(nullable = false)
 	private Boolean seniorStaffPresence;
 	
-	@OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
-	private List<Employee_V1> allocatedEmployees = new ArrayList<>();
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(
+	    name = "roster_employee_mapping",
+	    joinColumns = @JoinColumn(name = "roster_id"),
+	    inverseJoinColumns = @JoinColumn(name = "employee_id")
+	)
+	
+	private Set<Employee_V1> allocatedEmployees = new HashSet<>();
 	
 	@OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
 	private List<Shift_V1> shifts = new ArrayList<Shift_V1>();
@@ -55,10 +66,7 @@ public class Roster_V1 {
 	private User user;
 	
 	public void addEmployee(Employee_V1 employee) {
-	    if (allocatedEmployees == null) {
-	        allocatedEmployees = new ArrayList<>();
-	    }
-	    allocatedEmployees.add(employee);
-	    employee.setRoster(this); // Crucial: This sets the foreign key
+	    this.allocatedEmployees.add(employee);
+	    employee.getRosters().add(this);
 	}
 }

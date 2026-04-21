@@ -1,7 +1,9 @@
 package com.example.timeManagementApi.entity.corporate.version1;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.timeManagementApi.entity.User;
 import com.example.timeManagementApi.util.IdentifierGenerator;
@@ -10,6 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -42,7 +45,7 @@ public class Employee_V1 {
 	@ManyToOne
 	private User user;
 	
-	@ManyToOne
-	private Roster_V1 roster;
+	@ManyToMany(mappedBy = "allocatedEmployees")
+	private Set<Roster_V1> rosters = new HashSet<>();
 	
 }

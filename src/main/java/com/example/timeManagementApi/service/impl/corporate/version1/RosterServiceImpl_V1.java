@@ -3,6 +3,8 @@ package com.example.timeManagementApi.service.impl.corporate.version1;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,15 +81,14 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 		rosterV1.setSeniorStaffPresence(constraintsDTO.isRequireSeniorOnShift());
 		rosterV1.setWeekdaysOff(constraintsDTO.getOffDaysPerRotation());
 		
-		List<Employee_V1> empList = rosterReq.getEmployeeIds()
+		Set<Employee_V1> empList = rosterReq.getEmployeeIds()
 			    .stream()
 			    .map((empId) -> {
 			        Employee_V1 emp = empRepo.findById(empId)
 			            .orElseThrow(() -> new RuntimeException("Employee ID " + empId + " not found in DB"));
 			        rosterV1.addEmployee(emp);
 			        return emp;
-			    })
-			    .toList();
+			    }).collect(Collectors.toSet());
 		
 		rosterV1.setAllocatedEmployees(empList);
 		
