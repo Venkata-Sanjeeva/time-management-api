@@ -1,9 +1,13 @@
 package com.example.timeManagementApi.service.impl.corporate.version1;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.timeManagementApi.entity.User;
 import com.example.timeManagementApi.entity.corporate.version1.Employee_V1;
+import com.example.timeManagementApi.entity.corporate.version1.Leave_V1;
 import com.example.timeManagementApi.entity.corporate.version1.Roster_V1;
 import com.example.timeManagementApi.entity.corporate.version1.SeniorEmployee;
 import com.example.timeManagementApi.entity.corporate.version1.Shift_V1;
@@ -24,6 +29,7 @@ import com.example.timeManagementApi.request.corporate.version1.RosterRequestVer
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1.ConstraintsDTO;
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1.ShiftDTO;
 import com.example.timeManagementApi.response.corporate.version0.RosterChartResponse;
+import com.example.timeManagementApi.response.corporate.version0.RosterChartResponse.EmployeeRow;
 import com.example.timeManagementApi.response.corporate.version1.RosterDTOV1;
 import com.example.timeManagementApi.response.corporate.version1.RosterResponseV1;
 import com.example.timeManagementApi.service.interfaces.corporate.version1.RosterService_V1;
@@ -158,8 +164,84 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 
 	@Override
 	public RosterChartResponse generateRosterChart(String rosterId) {
-		// TODO Auto-generated method stub
-		return null;
+	    // 1. Fetch Roster and associated data
+	    Roster_V1 roster = rosterRepo.findById(rosterId)
+	            .orElseThrow(() -> new RuntimeException("Roster not found"));
+	    
+	    RosterChartResponse chartResponse = new RosterChartResponse();
+	    chartResponse.setRosterId(rosterId);
+
+	    // 2. Prepare the date range
+	    LocalDate startDate = roster.getStartDate();
+	    LocalDate endDate = roster.getEndDate();
+	    List<LocalDate> allDates = startDate.datesUntil(endDate.plusDays(1)).toList();
+	    chartResponse.setDates(allDates.stream().map(LocalDate::toString).toList());
+
+	    // 3. Prepare Shift Rotation Logic
+	    List<Shift_V1> activeShifts = roster.getShifts().stream()
+	            .filter(Shift_V1::getActive)
+	            .toList();
+	    
+	    List<EmployeeRow> rows = new ArrayList<>();
+
+	    // 4. Iterate through each allocated employee
+	    for (Employee_V1 emp : roster.getAllocatedEmployees()) {
+	        EmployeeRow row = new EmployeeRow();
+	        row.setEmpName(emp.getName());
+	        Map<String, String> dayStatus = new HashMap<>();
+
+	        // Get employee's leave dates in a Set for O(1) lookup
+	        Set<LocalDate> leaveDates = emp.getLeavesTaken().stream()
+	                .map(Leave_V1::getLeaveDate)
+	                .collect(Collectors.toSet());
+
+	        // Tracking index to rotate shifts fairly
+	        int shiftIndex = 0;
+
+	        for (LocalDate date : allDates) {
+	            String dateStr = date.toString();
+	            
+	            // PRIORITY 1: Check for Leaves
+	            if (leaveDates.contains(date)) {
+	                dayStatus.put(dateStr, "LEAVE");
+	            } 
+	            // PRIORITY 2: Check for Weekends/Offs
+	            else if (isOffDay(date, roster)) {
+	                dayStatus.put(dateStr, "OFF");
+	            } 
+	            // PRIORITY 3: Assign Shift
+	            else {
+	                // Logic: Assign next available shift and increment index
+	                if (!activeShifts.isEmpty()) {
+	                    Shift_V1 assignedShift = activeShifts.get(shiftIndex % activeShifts.size());
+	                    dayStatus.put(dateStr, assignedShift.getName());
+	                    shiftIndex++; 
+	                } else {
+	                    dayStatus.put(dateStr, "NO_SHIFT_DEFINED");
+	                }
+	            }
+	        }
+	        row.setDayStatus(dayStatus);
+	        rows.add(row);
+	    }
+
+	    chartResponse.setRows(rows);
+	    return chartResponse;
+	}
+
+	// Helper method to determine if a day is a scheduled "Off"
+	private boolean isOffDay(LocalDate date, Roster_V1 roster) {
+	    DayOfWeek day = date.getDayOfWeek();
+	    
+	    // If includeWeekends is false, Saturday/Sunday are always OFF
+	    if (!roster.getIncludeWeekends() && 
+	       (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)) {
+	        return true;
+	    }
+	    
+	    // Custom Weekday Off Logic (Example: If weekdaysOff is 1, maybe Monday is off)
+	    // You can adjust this logic based on how you store 'weekdaysOff' (int vs bitmask)
+	    return false; 
 	}
 
 	@Override

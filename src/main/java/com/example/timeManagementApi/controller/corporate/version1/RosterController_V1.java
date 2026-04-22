@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.timeManagementApi.request.corporate.version1.RosterRequestVersion1;
 import com.example.timeManagementApi.response.GlobalResponse;
+import com.example.timeManagementApi.response.corporate.version0.RosterChartResponse;
 import com.example.timeManagementApi.response.corporate.version1.RosterDTOV1;
 import com.example.timeManagementApi.response.corporate.version1.RosterResponseV1;
 import com.example.timeManagementApi.service.impl.corporate.version1.RosterServiceImpl_V1;
@@ -57,6 +58,13 @@ public class RosterController_V1 {
 	public ResponseEntity<GlobalResponse<List<RosterDTOV1>>> getAllRostersForRespectiveUser(Principal principal) {
 	    return ResponseEntity.status(HttpStatus.OK)
 	    		.body(new GlobalResponse<>(200, "All Rosters Fetched Successfully!", rosterService.readAllRostersRelatesToUserEmail(principal.getName())));
+	}
+	
+	@GetMapping("/generate/{rosterId}/chart")
+	public ResponseEntity<GlobalResponse<RosterChartResponse>> getRosterChart(@PathVariable String rosterId) {
+	    RosterChartResponse chartData = rosterService.generateRosterChart(rosterId);
+	    return ResponseEntity.status(HttpStatus.OK)
+	    		.body(new GlobalResponse<>(200, "Chart Generated Successfully!", chartData));
 	}
 	
 	@DeleteMapping("/delete/{id}")
