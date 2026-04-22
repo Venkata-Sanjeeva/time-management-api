@@ -222,6 +222,7 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 	            }
 	        }
 	        row.setDayStatus(dayStatus);
+	        row.setIsSenior(seniorEmpRepo.existsByEmployeeId(emp.getId()));
 	        rows.add(row);
 	    }
 
@@ -233,8 +234,8 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 	private boolean isOffDay(LocalDate date, Roster_V1 roster) {
 	    DayOfWeek day = date.getDayOfWeek();
 	    
-	    // If includeWeekends is false, Saturday/Sunday are always OFF
-	    if (!roster.getIncludeWeekends() && 
+	    // If includeWeekends is true, Saturday/Sunday are assigned as OFF
+	    if (roster.getIncludeWeekends() && 
 	       (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)) {
 	        return true;
 	    }

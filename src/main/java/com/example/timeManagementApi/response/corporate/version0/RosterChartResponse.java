@@ -23,6 +23,7 @@ public class RosterChartResponse {
     @NoArgsConstructor
     public static class EmployeeRow {
         private String empName;
+        private Boolean isSenior;
         private Map<String, String> dayStatus; // {"2026-05-01": "SHIFT", "2026-05-14": "LEAVE"}
     }
 }

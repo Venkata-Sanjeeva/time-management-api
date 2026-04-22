@@ -8,4 +8,5 @@ import com.example.timeManagementApi.entity.corporate.version1.SeniorEmployee;
 
 public interface SeniorEmployeeRepository extends JpaRepository<SeniorEmployee, String> {
 	Set<SeniorEmployee> findByRosterId(String rosterId);
+	boolean existsByEmployeeId(String empId);
 }
