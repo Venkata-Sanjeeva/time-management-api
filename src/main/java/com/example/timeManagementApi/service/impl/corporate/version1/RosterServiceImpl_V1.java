@@ -134,8 +134,8 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 			Shift_V1 shiftV1 = new Shift_V1();
 			
 			shiftV1.setName(shiftName);
-			shiftV1.setStart(startTime);
-			shiftV1.setEnd(endTime);
+			shiftV1.setStartTime(startTime);
+			shiftV1.setEndTime(endTime);
 			shiftV1.setActive(isActive);
 			
 			shiftV1.setRoster(rosterV1);

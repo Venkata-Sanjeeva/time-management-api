@@ -25,10 +25,10 @@ public class Shift_V1 {
 	private String name;
 	
 	@Column(nullable = false)
-	private LocalTime start;
+	private LocalTime startTime;
 	
 	@Column(nullable = false)
-	private LocalTime end;
+	private LocalTime endTime;
 	
 	@Column(nullable = false)
 	private Boolean active;
