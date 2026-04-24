@@ -259,7 +259,7 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 
 	@Override
 	public void deleteRoster(String rosterId) {
-		rosterRepo.deleteById(rosterId);	
+		rosterRepo.deleteById(rosterId);
 	}
 	
 }
