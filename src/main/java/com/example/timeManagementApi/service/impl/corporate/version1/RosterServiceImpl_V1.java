@@ -247,7 +247,7 @@ public class RosterServiceImpl_V1 implements RosterService_V1 {
 
 	@Override
 	public List<RosterDTOV1> readAllRostersRelatesToUserEmail(String userEmail) {
-		List<Roster_V1> rosterList = rosterRepo.findAll();
+		List<Roster_V1> rosterList = rosterRepo.findByUserEmail(userEmail);
 		
 		return rosterList.stream().map((roster) -> RosterDTOV1.builder()
 				.rosterId(roster.getId())
